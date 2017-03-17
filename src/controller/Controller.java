@@ -1,35 +1,28 @@
 package controller;
 
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import main.Main;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.StringJoiner;
 
 public class Controller implements Initializable {
     @FXML
-    private MenuItem menuitem_file_open, menuitem_file_close, menuitem_help_about;
+    private MenuItem menuitem_file_open, menuitem_file_close, menuitem_edit_delete, menuitem_help_about;
     @FXML
-    private ScrollPane scroll_pane;
+    private ScrollPane center_scroll_pane, right_scroll_pane;
     @FXML
-    private GridPane grid_pane;
+    private GridPane center_grid_pane, right_grid_pane;
 
     private static String fileChooserPath = "";
 
@@ -40,7 +33,9 @@ public class Controller implements Initializable {
         assert menuitem_file_open != null : "fx:id=\"menuitem_file_open\" was not injected: check your FXML file.";
         assert menuitem_file_close != null : "fx:id=\"menuitem_file_close\" was not injected: check your FXML file.";
         assert menuitem_help_about != null : "fx:id=\"menuitem_file_about\" was not injected: check your FXML file.";
+        assert menuitem_edit_delete != null : "fx:id=\"menuitem_edit_delete\" was not injected: check your FXML file.";
 
+        ImageWorker imageWorker = new ImageWorker(center_grid_pane, right_grid_pane);
 
         // MENU ITEMS
         menuitem_file_open.setOnAction(event -> {
@@ -60,7 +55,8 @@ public class Controller implements Initializable {
             if (file != null) {
                 fileChooserPath = file.getParent();
                 Image image = new Image(file.toURI().toString());
-                pixelProcess(image);
+                imageWorker.pixelProcess(image);
+                imageWorker.printColor();
             }
         });
 
@@ -86,46 +82,13 @@ public class Controller implements Initializable {
     }
 
 
-    public void pixelProcess(Image img) {
-        // charge image to a buffer
-        BufferedImage image = SwingFXUtils.fromFXImage(img,null);
+    /*public void updateProgress(double progress){
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(progress_bar.progressProperty(), progress)),
+                new KeyFrame(Duration.seconds(0.01), new KeyValue(progress_bar.progressProperty(), progress)));
 
-        // fill the GridPane with colored Pane
-        for (int j=0; j<img.getHeight(); j++) {
-
-            // progress bar on the horizontal loop (row index)
-            Double progress = (j*100)/img.getHeight();
-            System.out.println("Load : " + progress.intValue());
-
-            for (int i = 0; i < img.getWidth(); i++) {
-                Pane l = new Pane();
-                l.setPrefSize(10, 10);
-                // retrieve color from a pixel
-                int pixel = image.getRGB(i, j);
-                // dynamicaly set style with the rgba pixel color
-                l.setStyle("-fx-background-color: " + formatARGB(pixel));
-                grid_pane.add(l, i, j);
-            }
-        }
-
-        // other method
-        /*PixelReader reader = img.getPixelReader();
-        System.out.println("Color : "+reader.getColor(i,j));*/
-    }
-
-    public String formatARGB(int pixel) {
-        int alpha = (pixel >> 24) & 0xff;
-        int red = (pixel >> 16) & 0xff;
-        int green = (pixel >> 8) & 0xff;
-        int blue = (pixel) & 0xff;
-
-        // change the alpha value to a percentage of 255
-        int perc = (alpha * 100)/255;
-        // format the integer to a 0.00 format
-        double result = perc*0.01;
-
-        //String hex = String.format("#%02x%02x%02x", red, green, blue);
-        String hex = "rgba("+red+","+green+","+blue+","+result+")";
-        return hex;
-    }
+        //timeline.playFrom(new Duration());
+        //timeline.setCycleCount(1);
+        timeline.play();
+    }*/
 }

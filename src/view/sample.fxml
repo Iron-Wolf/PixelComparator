@@ -22,7 +22,7 @@
                </accelerator></MenuItem>
            </Menu>
            <Menu text="_Edit">
-               <MenuItem mnemonicParsing="false" text="Delete" />
+               <MenuItem fx:id="menuitem_edit_delete" text="_Delete" />
            </Menu>
            <Menu text="_Help">
                <MenuItem fx:id="menuitem_help_about" mnemonicParsing="false" text="About" />
@@ -30,11 +30,18 @@
        </MenuBar>
    </top>
    <center>
-      <ScrollPane fx:id="scroll_pane" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="center_scroll_pane" BorderPane.alignment="CENTER">
          <content>
-            <GridPane fx:id="grid_pane" gridLinesVisible="true">
-
+            <GridPane fx:id="center_grid_pane" gridLinesVisible="true">
             </GridPane>
          </content></ScrollPane>
    </center>
+   <right>
+      <ScrollPane fx:id="right_scroll_pane" hbarPolicy="NEVER" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+         <content>
+            <GridPane fx:id="right_grid_pane" alignment="CENTER" prefWidth="100.0">
+      </GridPane>
+         </content>
+      </ScrollPane>
+   </right>
 </BorderPane>

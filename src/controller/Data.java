@@ -34,7 +34,7 @@ public class Data {
         hmap.put("9F83B6","violet pastel");
         hmap.put("4AB8EB","bleu pastel");
         hmap.put("8FC474","vert pastel");
-        hmap.put("EA8DC4","rose pastel");
+        hmap.put("FFE4FF","rose pastel");
         hmap.put("21A9BF","azure");
         hmap.put("E6A823","marron nounours");
         hmap.put("98B6BE","gris clair");

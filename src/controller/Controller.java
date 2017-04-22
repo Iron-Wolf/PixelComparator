@@ -32,8 +32,9 @@ public class Controller implements Initializable {
         // check @FXML variables before use them
         assert menuitem_file_open != null : "fx:id=\"menuitem_file_open\" was not injected: check your FXML file.";
         assert menuitem_file_close != null : "fx:id=\"menuitem_file_close\" was not injected: check your FXML file.";
-        assert menuitem_help_about != null : "fx:id=\"menuitem_file_about\" was not injected: check your FXML file.";
         assert menuitem_edit_delete != null : "fx:id=\"menuitem_edit_delete\" was not injected: check your FXML file.";
+        assert menuitem_help_about != null : "fx:id=\"menuitem_file_about\" was not injected: check your FXML file.";
+
 
         ImageWorker imageWorker = new ImageWorker(center_grid_pane, right_grid_pane);
 
@@ -61,6 +62,11 @@ public class Controller implements Initializable {
         });
 
         menuitem_file_close.setOnAction(event -> Platform.exit());
+
+
+        menuitem_edit_delete.setOnAction(event -> {
+            //center_grid_pane
+        });
 
 
         menuitem_help_about.setOnAction(event -> {

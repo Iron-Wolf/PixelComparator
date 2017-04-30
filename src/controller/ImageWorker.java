@@ -7,17 +7,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class ImageWorker {
     private GridPane imageGPane, colorGPane;
-    private static ArrayList<String> imageHexaColor;
+    private static HashMap<String,Integer> imageHexaColor;// contains the hexadecimal code and the number of occurrences
 
     public ImageWorker(GridPane imageGPane, GridPane colorGPane) {
-        this.imageGPane = imageGPane;
-        this.colorGPane = colorGPane;
+        this.imageGPane = imageGPane; // image canvas
+        this.colorGPane = colorGPane; // button area
     }
 
     /**
@@ -26,13 +24,12 @@ public class ImageWorker {
      * @param img the image object
      */
     public void pixelProcess(Image img) {
-        imageHexaColor = new ArrayList<>();
+        imageHexaColor = new HashMap<>();
         // charge image to a buffer
         BufferedImage image = SwingFXUtils.fromFXImage(img, null);
 
         // fill the GridPane with colored Pane
         for (int j = 0; j < img.getHeight(); j++) {
-
             // progress bar on the horizontal loop (row index)
             //Double progress = (j*100)/img.getHeight();
             //System.out.println("Load : " + progress.intValue()*0.01);
@@ -42,11 +39,20 @@ public class ImageWorker {
                 p.setPrefSize(10, 10);
                 // retrieve color from a pixel
                 int pixel = image.getRGB(i, j);
+
+                // get the nearest corresponding color from the HashMap reference in the imageHexaColor map
+                String nearestHexValue = getNearestColor(pixel);
+                // add to list if not already in and increment the counter
+                imageHexaColor.putIfAbsent(nearestHexValue, 0);
+                imageHexaColor.replace(nearestHexValue, imageHexaColor.get(nearestHexValue) + 1);
+
                 // set style with the rgba pixel color
                 p.setStyle("-fx-background-color: " + formatARGB(pixel));
+                //p.setOnMouseEntered(e -> p.setStyle("-fx-border-color: black"));
+                //p.setOnMouseExited(e -> p.setStyle("-fx-background-color: " + formatARGB(pixel)));
+                // add a tooltip with the color name
+                //Tooltip.install(p, new Tooltip(Data.hmap.get(nearestHexValue)));
                 imageGPane.add(p, i, j);
-                // add the nearest corresponding color from the HashMap in the ArrayList
-                addNearestColor(pixel);
             }
         }
         // other method
@@ -56,63 +62,57 @@ public class ImageWorker {
 
 
     /**
-     * Iterate through the ArrayList and display the color on colorGPane
+     * Iterate through the HashMap and display the color on colorGPane
      */
     public void printColor() {
-        for (int i = 0; i < imageHexaColor.size(); i++) {
+        int i = 0;
+        // iterate through colors
+        for (HashMap.Entry pair : imageHexaColor.entrySet()) {
             JFXButton b = new JFXButton();
-            b.setPrefSize(100, 50);
+            b.setPrefSize(140, 20);
             b.setMnemonicParsing(false);
 
             // display white text on dark background
-            String c = distance(imageHexaColor.get(i), "000000") < 0.50 ? "white" : "black";
-            b.setStyle("-fx-background-color: #" + imageHexaColor.get(i) +
+            String c = distance(pair.getKey().toString(), "000000") < 0.50 ? "white" : "black";
+            b.setStyle("-fx-background-color: #" + pair.getKey().toString() +
                     ";-fx-text-fill: " + c);
-            b.setText(Data.hmap.get(imageHexaColor.get(i)));
+            b.setText(Data.hmap.get(pair.getKey().toString()) + " - " + pair.getValue());
 
-            colorGPane.add(b, 0, i);
+            colorGPane.add(b, 0, i++);
         }
     }
 
 
     /**
-     * Add the nearest hexa value from {@link Data} to the Arraylist.<br/>
-     * Values are not duplicate in the array.
+     * Return the nearest hexa value from {@link Data}.<br/>
      *
-     * @param pixel value to compare and add to the array
+     * @param pixel value to compare
+     * @return the nearest value from the HashMap
      */
-    private void addNearestColor(int pixel) {
+    private String getNearestColor(int pixel) {
         // build hexa value from int parameter
         int red = (pixel >> 16) & 0xff;
         int green = (pixel >> 8) & 0xff;
         int blue = (pixel) & 0xff;
         String hex = String.format("%02x%02x%02x", red, green, blue);
 
-        // compare hexa value to our HashMap
-        String nearestHexValue = compare(hex, Data.hmap);
-
-        // add to list if not already in
-        if (!imageHexaColor.contains(nearestHexValue))
-            imageHexaColor.add(nearestHexValue);
+        // compare hexa value to the HashMap
+        return compare(hex, Data.hmap);
     }
 
 
     /**
-     * Return the nearest value from a HashMap to a given value
+     * Compare the nearest value from a HashMap to a given value
      *
      * @param hex  value to compare
      * @param hmap HashMap containing all the values to be compared
      * @return the matching value from the HashMap
      */
-    private String compare(String hex, HashMap hmap) {
+    public static String compare(String hex, HashMap<String,String> hmap) {
         double answer, ref = 1;
         String keyResult = "";
-
-        Iterator it = hmap.entrySet().iterator();
-        while (it.hasNext()) {
-            // iterate through colors
-            HashMap.Entry pair = (HashMap.Entry) it.next();
-
+        // iterate through HashMap
+        for (HashMap.Entry pair : hmap.entrySet()) {
             // compare the given value and the current HashMap key
             answer = distance(hex, pair.getKey().toString().toLowerCase());
 
@@ -131,7 +131,7 @@ public class ImageWorker {
      * @param hexRef reference value to be compared (in "ffffff" format)
      * @return a value between 0 (identical) and 1 (opposite)
      */
-    private double distance(String hexVal, String hexRef) {
+    private static double distance(String hexVal, String hexRef) {
         int red, green, blue;
         double answer;
         //convert values to int

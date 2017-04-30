@@ -1,5 +1,6 @@
 package main;
 
+import controller.Data;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +16,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
 
         pStage = primaryStage;
-        pStage.setTitle("Pixel Comparator");
+        pStage.setTitle(Data.appName);
         pStage.setScene(new Scene(root/*, 600, 400*/));
         pStage.setMinHeight(400);
         pStage.setMinWidth(600);

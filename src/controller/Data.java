@@ -43,4 +43,6 @@ public class Data {
 
         return hmap;
     }
+
+    public static final String appName = "Pixel Comparator";
 }

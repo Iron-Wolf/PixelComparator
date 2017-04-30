@@ -39,7 +39,7 @@
    <right>
       <ScrollPane fx:id="right_scroll_pane" hbarPolicy="NEVER" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-            <GridPane fx:id="right_grid_pane" alignment="CENTER" prefWidth="100.0">
+            <GridPane fx:id="right_grid_pane" alignment="CENTER">
       </GridPane>
          </content>
       </ScrollPane>

@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import main.Main;
 
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,13 +36,29 @@ public class Controller implements Initializable {
         assert menuitem_edit_delete != null : "fx:id=\"menuitem_edit_delete\" was not injected: check your FXML file.";
         assert menuitem_help_about != null : "fx:id=\"menuitem_file_about\" was not injected: check your FXML file.";
 
-
         ImageWorker imageWorker = new ImageWorker(center_grid_pane, right_grid_pane);
+
+        center_grid_pane.setOnMouseClicked( e -> {
+            try {
+                // get the pixel under the mouse
+                Robot robot = new Robot();
+                Point coord = MouseInfo.getPointerInfo().getLocation();
+                Color color = robot.getPixelColor((int) coord.getX(), (int) coord.getY());
+
+                // format in hexadecimal and compare it with predefined color
+                String hex = String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+                String value = Data.hmap.get(ImageWorker.compare(hex, Data.hmap));
+
+                // display color in the title (because why not)
+                Main.getPrimaryStage().setTitle(Data.appName + " - " + value + " (" + hex.toUpperCase() + ")");
+            } catch (AWTException e1) {
+            }
+        });
 
         // MENU ITEMS
         menuitem_file_open.setOnAction(event -> {
             FileChooser chooser = new FileChooser();
-            chooser.setTitle(Main.getPrimaryStage().getTitle() + " - Select file");
+            chooser.setTitle(Data.appName + " - Select file");
             // open FileChooser with the last know location (default is the home directory)
             fileChooserPath = fileChooserPath.equals("") ? System.getProperty("user.home") : fileChooserPath;
             chooser.setInitialDirectory(new File(fileChooserPath));
@@ -56,8 +73,21 @@ public class Controller implements Initializable {
             if (file != null) {
                 fileChooserPath = file.getParent();
                 Image image = new Image(file.toURI().toString());
-                imageWorker.pixelProcess(image);
-                imageWorker.printColor();
+                // test size of the image
+                if (image.getHeight() <= 400 || image.getWidth() <= 400) {
+                    imageWorker.pixelProcess(image);
+                    imageWorker.printColor();
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle(Data.appName + " - Warning");
+                    alert.setContentText("Image supérieure à 400x400.");
+                    // setting the modality and owner will assure that the alert will appear over the stage,
+                    // even if the stage is moved
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.initOwner(Main.getPrimaryStage());
+                    alert.showAndWait();
+                }
             }
         });
 
@@ -72,7 +102,7 @@ public class Controller implements Initializable {
         menuitem_help_about.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-            alert.setTitle(Main.getPrimaryStage().getTitle() + " - About");
+            alert.setTitle(Data.appName + " - About");
             alert.setHeaderText("Pixel Comparator\nVersion : Alpha");
             alert.setContentText("Runtime : "
                     + "\nJRE : "+System.getProperty("java.runtime.version")

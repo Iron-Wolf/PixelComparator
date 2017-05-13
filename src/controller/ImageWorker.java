@@ -1,7 +1,9 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -24,6 +26,10 @@ public class ImageWorker {
      * @param img the image object
      */
     public void pixelProcess(Image img) {
+        // clear the grid pane of the image and the button, before displaying the new image
+        clearGridPane(imageGPane);
+        clearGridPane(colorGPane);
+
         imageHexaColor = new HashMap<>();
         // charge image to a buffer
         BufferedImage image = SwingFXUtils.fromFXImage(img, null);
@@ -40,6 +46,7 @@ public class ImageWorker {
                 // retrieve color from a pixel
                 int pixel = image.getRGB(i, j);
 
+                //TODO : gerer les pixels transparants
                 // get the nearest corresponding color from the HashMap reference in the imageHexaColor map
                 String nearestHexValue = getNearestColor(pixel);
                 // add to list if not already in and increment the counter
@@ -173,5 +180,16 @@ public class ImageWorker {
         double result = perc * 0.01;
 
         return "rgba(" + red + "," + green + "," + blue + "," + result + ")";
+    }
+
+    /**
+     * Get child nodes of the grid pane and remove them
+     * @param gp the grid pane to clear
+     */
+    public void clearGridPane(GridPane gp){
+        ObservableList<Node> l = gp.getChildren();
+        while (l.size()>0){
+            l.remove(0,1);
+        }
     }
 }

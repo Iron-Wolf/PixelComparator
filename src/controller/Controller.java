@@ -95,7 +95,8 @@ public class Controller implements Initializable {
 
 
         menuitem_edit_delete.setOnAction(event -> {
-            //center_grid_pane
+            imageWorker.clearGridPane(center_grid_pane);
+            imageWorker.clearGridPane(right_grid_pane);
         });
 
 
@@ -116,7 +117,6 @@ public class Controller implements Initializable {
         });
 
     }
-
 
     /*public void updateProgress(double progress){
         Timeline timeline = new Timeline(

@@ -1,12 +1,13 @@
 package controller;
 
+import Ressources.Data;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -14,7 +15,13 @@ import java.util.HashMap;
 public class ImageWorker {
     private GridPane imageGPane, colorGPane;
     private static HashMap<String,Integer> imageHexaColor;// contains the hexadecimal code and the number of occurrences
+    private Pane selectedPane;
 
+    /**
+     * Constructor of ImageWorker
+     * @param imageGPane
+     * @param colorGPane
+     */
     public ImageWorker(GridPane imageGPane, GridPane colorGPane) {
         this.imageGPane = imageGPane; // image canvas
         this.colorGPane = colorGPane; // button area
@@ -59,6 +66,16 @@ public class ImageWorker {
                 //p.setOnMouseExited(e -> p.setStyle("-fx-background-color: " + formatARGB(pixel)));
                 // add a tooltip with the color name
                 //Tooltip.install(p, new Tooltip(Data.hmap.get(nearestHexValue)));
+
+                // add border on clicked Pane and remove previously selected one
+                p.setOnMouseClicked(event -> {
+                    if (selectedPane != null)
+                        selectedPane.setBorder(null);
+                    selectedPane = p;
+                    selectedPane.setBorder(new Border(new BorderStroke(javafx.scene.paint.Color.RED,
+                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                });
+
                 imageGPane.add(p, i, j);
             }
         }
@@ -81,9 +98,12 @@ public class ImageWorker {
 
             // display white text on dark background
             String c = distance(pair.getKey().toString(), "000000") < 0.50 ? "white" : "black";
-            b.setStyle("-fx-background-color: #" + pair.getKey().toString() +
-                    ";-fx-text-fill: " + c);
-            b.setText(Data.hmap.get(pair.getKey().toString()) + " - " + pair.getValue());
+            b.setStyle("-fx-background-color: #" + pair.getKey().toString() + ";-fx-text-fill: " + c);
+
+            // set text and tooltip
+            String textButton = Data.hmap.get(pair.getKey().toString()) + " - " + pair.getValue();
+            b.setText(textButton);
+            b.setTooltip(new Tooltip(textButton));
 
             colorGPane.add(b, 0, i++);
         }
@@ -96,7 +116,7 @@ public class ImageWorker {
      * @param pixel value to compare
      * @return the nearest value from the HashMap
      */
-    private String getNearestColor(int pixel) {
+    public static String getNearestColor(int pixel) {
         // build hexa value from int parameter
         int red = (pixel >> 16) & 0xff;
         int green = (pixel >> 8) & 0xff;

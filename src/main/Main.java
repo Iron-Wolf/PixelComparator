@@ -1,6 +1,6 @@
 package main;
 
-import controller.Data;
+import Ressources.Data;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +13,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/mainWindow.fxml"));
 
         pStage = primaryStage;
         pStage.setTitle(Data.appName);
-        pStage.setScene(new Scene(root/*, 600, 400*/));
+        // specify the initial width and height, otherwise the content does not scall up to the window
+        pStage.setScene(new Scene(root, 600, 400));
         pStage.setMinHeight(400);
         pStage.setMinWidth(600);
         pStage.show();

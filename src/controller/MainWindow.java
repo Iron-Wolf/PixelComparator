@@ -87,6 +87,7 @@ public class MainWindow implements Initializable {
                             // save current button
                             selectedButton = button;
                             selectedButton.setStyle(button.getStyle() + ";-fx-font-weight: bold;-fx-border-width: 3;-fx-border-color: red;");
+                            selectedButton.toFront();
                             break;
                         }
                     }
@@ -114,7 +115,7 @@ public class MainWindow implements Initializable {
                 fileChooserPath = file.getParent();
                 selectedImage = new Image(file.toURI().toString());
                 // test size of the image
-                if (selectedImage.getHeight() <= 400 || selectedImage.getWidth() <= 400) {
+                if (selectedImage.getHeight() <= Data.maxheight || selectedImage.getWidth() <= Data.maxWidth) {
                     imageWorker.pixelProcess(selectedImage);
                     imageWorker.printColor();
                     menuitem_file_generate.setDisable(false);
@@ -171,7 +172,8 @@ public class MainWindow implements Initializable {
 
             alert.setTitle(Data.appName + " - About");
             alert.setHeaderText("Pixel Comparator\nVersion : Alpha");
-            alert.setContentText("Runtime : "
+            alert.setContentText("This app allow importing image of 400 by 400 pixels" +
+                    "\n\nCurrent Runtime : "
                     + "\nJRE : "+System.getProperty("java.runtime.version")
                     + "\nJVM : "+System.getProperty("os.arch"));
 

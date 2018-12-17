@@ -45,4 +45,8 @@ public class Data {
     }
 
     public static final String appName = "Pixel Comparator";
+
+    // max width and height of the image
+    public static final int maxWidth = 400;
+    public static final int maxheight = 400;
 }

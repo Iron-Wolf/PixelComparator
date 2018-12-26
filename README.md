@@ -11,3 +11,7 @@ Below is the process to work on this project, from the intelliJ IDE :
 As of OpenJDK 8, JavaFX is no longer included in openjdk.  
 If you work with it, you will need to install the *openjfx* package.  
 You can also check that your JDK contains this file : `<Java SDK root>/jre/lib/ext/jfxrt.jar`  
+
+
+## Package
+Package the application in a simple [jar artifact](https://www.jetbrains.com/help/idea/creating-and-running-your-first-java-application.html#package) to access it outside of the IDE.

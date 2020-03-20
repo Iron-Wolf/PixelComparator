@@ -17,7 +17,7 @@ public class Main extends Application {
 
         pStage = primaryStage;
         pStage.setTitle(Data.appName);
-        // specify the initial width and height, otherwise the content does not scall up to the window
+        // specify the initial width and height, otherwise the content does not scale up to the window
         pStage.setScene(new Scene(root, 600, 400));
         pStage.setMinHeight(400);
         pStage.setMinWidth(600);

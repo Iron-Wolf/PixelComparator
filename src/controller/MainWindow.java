@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.robot.Robot;
 import main.Main;
 
 import java.awt.*;
@@ -50,18 +51,23 @@ public class MainWindow implements Initializable {
         assert menuitem_help_about != null : "fx:id=\"menuitem_file_about\" was not injected: check your FXML file.";
 
         menuitem_file_generate.setDisable(true);
-        ImageWorker imageWorker = new ImageWorker(center_grid_pane, right_grid_pane);
+        var imageWorker = new ImageWorker(center_grid_pane, right_grid_pane);
 
         // Click on the main GridPane
         center_grid_pane.setOnMouseClicked(e -> {
             try {
                 // get the pixel under the mouse
-                Robot robot = new Robot();
-                Point coord = MouseInfo.getPointerInfo().getLocation();
-                Color color = robot.getPixelColor((int) coord.getX(), (int) coord.getY());
+                var robot = new Robot();
+                var coord = MouseInfo.getPointerInfo().getLocation();
+                var color = robot.getPixelColor(coord.getX(),coord.getY());
 
-                // format in hexadecimal and compare it with predefined color
-                String hex = String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+                // format in hexadecimal
+                var red = (int) Math.round(color.getRed() * 255.0D);
+                var green = (int) Math.round(color.getGreen() * 255.0D);
+                var blue = (int) Math.round(color.getBlue() * 255.0D);
+                String hex = String.format("%02x%02x%02x",red, green, blue);
+
+                // compare value with predefined color
                 String value = Data.hmap.get(ImageWorker.compare(hex, Data.hmap));
 
                 // display color in the title (because why not)
@@ -82,23 +88,26 @@ public class MainWindow implements Initializable {
                         if (button.getText().contains(value + " -")) {
                             // remove border from previously selected button
                             if (selectedButton != null) {
-                                selectedButton.setStyle(selectedButton.getStyle().replace(";-fx-font-weight: bold;-fx-border-width: 3;-fx-border-color: red;", ""));
+                                selectedButton.setStyle(selectedButton.getStyle()
+                                        .replace(";-fx-font-weight: bold;-fx-border-width: 3;-fx-border-color: red;", ""));
                             }
                             // save current button
                             selectedButton = button;
-                            selectedButton.setStyle(button.getStyle() + ";-fx-font-weight: bold;-fx-border-width: 3;-fx-border-color: red;");
+                            selectedButton.setStyle(button.getStyle() +
+                                    ";-fx-font-weight: bold;-fx-border-width: 3;-fx-border-color: red;");
                             selectedButton.toFront();
                             break;
                         }
                     }
                 }
-            } catch (AWTException e1) {
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         });
 
         // MENU ITEMS
         menuitem_file_open.setOnAction(event -> {
-            FileChooser chooser = new FileChooser();
+            var chooser = new FileChooser();
             chooser.setTitle(Data.appName + " - Select file");
             // open FileChooser with the last know location (default is the home directory)
             fileChooserPath = fileChooserPath.equals("") ? System.getProperty("user.home") : fileChooserPath;
@@ -109,19 +118,19 @@ public class MainWindow implements Initializable {
                     new FileChooser.ExtensionFilter("JPG", "*.jpg"),
                     new FileChooser.ExtensionFilter("PNG", "*.png")
             );
-            File file = chooser.showOpenDialog(Main.getPrimaryStage());
+            var file = chooser.showOpenDialog(Main.getPrimaryStage());
 
             if (file != null) {
                 fileChooserPath = file.getParent();
                 selectedImage = new Image(file.toURI().toString());
                 // test size of the image
-                if (selectedImage.getHeight() <= Data.maxheight || selectedImage.getWidth() <= Data.maxWidth) {
+                if (selectedImage.getHeight() <= Data.maxHeight || selectedImage.getWidth() <= Data.maxWidth) {
                     imageWorker.pixelProcess(selectedImage);
                     imageWorker.printColor();
                     menuitem_file_generate.setDisable(false);
                 }
                 else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    var alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle(Data.appName + " - Warning");
                     alert.setContentText("Image supérieure à 400x400.");
                     // setting the modality and owner will assure that the alert will appear over the stage,
@@ -136,7 +145,7 @@ public class MainWindow implements Initializable {
         menuitem_file_generate.setOnAction(event -> {
             try {
                 if (selectedImage != null) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/generate.fxml"));
+                    var loader = new FXMLLoader(getClass().getResource("/view/generate.fxml"));
                     Parent root = loader.load();
 
                     // send the selected image to the controller
@@ -168,8 +177,8 @@ public class MainWindow implements Initializable {
 
 
         menuitem_help_about.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(true);
             alert.setTitle(Data.appName + " - About");
             alert.setHeaderText("Pixel Comparator\nVersion : Alpha");
             alert.setContentText("This app allow importing image of 400 by 400 pixels" +

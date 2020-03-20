@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindow">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindow">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="_File">
@@ -44,18 +44,12 @@
     </top>
     <center>
         <ScrollPane fx:id="center_scroll_pane" BorderPane.alignment="CENTER">
-            <content>
-                <GridPane fx:id="center_grid_pane" gridLinesVisible="true">
-                </GridPane>
-            </content>
+            <GridPane fx:id="center_grid_pane" gridLinesVisible="true"/>
         </ScrollPane>
     </center>
     <right>
         <ScrollPane fx:id="right_scroll_pane" hbarPolicy="NEVER" minWidth="120.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
-            <content>
-                <GridPane fx:id="right_grid_pane" alignment="CENTER">
-                </GridPane>
-            </content>
+            <GridPane fx:id="right_grid_pane" alignment="CENTER"/>
         </ScrollPane>
     </right>
 </BorderPane>

@@ -2,25 +2,23 @@ package controller;
 
 import Ressources.Data;
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class ImageWorker {
-    private GridPane imageGPane, colorGPane;
+    private final GridPane imageGPane;
+    private final GridPane colorGPane;
     private static HashMap<String,Integer> imageHexaColor;// contains the hexadecimal code and the number of occurrences
     private Pane selectedPane;
 
     /**
      * Constructor of ImageWorker
-     * @param imageGPane
-     * @param colorGPane
+     * @param imageGPane Center pane, who display the image
+     * @param colorGPane Side pane, with list of color
      */
     public ImageWorker(GridPane imageGPane, GridPane colorGPane) {
         this.imageGPane = imageGPane; // image canvas
@@ -39,7 +37,7 @@ public class ImageWorker {
 
         imageHexaColor = new HashMap<>();
         // charge image to a buffer
-        BufferedImage image = SwingFXUtils.fromFXImage(img, null);
+        var image = SwingFXUtils.fromFXImage(img, null);
 
         // fill the GridPane with colored Pane
         for (int j = 0; j < img.getHeight(); j++) {
@@ -48,14 +46,13 @@ public class ImageWorker {
             //System.out.println("Load : " + progress.intValue()*0.01);
 
             for (int i = 0; i < img.getWidth(); i++) {
-                Pane p = new Pane();
+                var p = new Pane();
                 p.setPrefSize(10, 10);
                 // retrieve color from a pixel
-                int pixel = image.getRGB(i, j);
+                var pixel = image.getRGB(i, j);
 
-                //TODO : gerer les pixels transparants
                 // get the nearest corresponding color from the HashMap reference in the imageHexaColor map
-                String nearestHexValue = getNearestColor(pixel);
+                var nearestHexValue = getNearestColor(pixel);
                 // add to list if not already in and increment the counter
                 imageHexaColor.putIfAbsent(nearestHexValue, 0);
                 imageHexaColor.replace(nearestHexValue, imageHexaColor.get(nearestHexValue) + 1);
@@ -91,17 +88,17 @@ public class ImageWorker {
     public void printColor() {
         int i = 0;
         // iterate through colors
-        for (HashMap.Entry pair : imageHexaColor.entrySet()) {
-            JFXButton b = new JFXButton();
+        for (var pair : imageHexaColor.entrySet()) {
+            var b = new JFXButton();
             b.setPrefSize(140, 20);
             b.setMnemonicParsing(false);
 
             // display white text on dark background
-            String c = distance(pair.getKey().toString(), "000000") < 0.50 ? "white" : "black";
-            b.setStyle("-fx-background-color: #" + pair.getKey().toString() + ";-fx-text-fill: " + c);
+            var c = distance(pair.getKey(), "000000") < 0.50 ? "white" : "black";
+            b.setStyle("-fx-background-color: #" + pair.getKey() + ";-fx-text-fill: " + c);
 
             // set text and tooltip
-            String textButton = Data.hmap.get(pair.getKey().toString()) + " - " + pair.getValue();
+            var textButton = Data.hmap.get(pair.getKey()) + " - " + pair.getValue();
             b.setText(textButton);
             b.setTooltip(new Tooltip(textButton));
 
@@ -118,10 +115,10 @@ public class ImageWorker {
      */
     public static String getNearestColor(int pixel) {
         // build hexa value from int parameter
-        int red = (pixel >> 16) & 0xff;
-        int green = (pixel >> 8) & 0xff;
-        int blue = (pixel) & 0xff;
-        String hex = String.format("%02x%02x%02x", red, green, blue);
+        var red = (pixel >> 16) & 0xff;
+        var green = (pixel >> 8) & 0xff;
+        var blue = (pixel) & 0xff;
+        var hex = String.format("%02x%02x%02x", red, green, blue);
 
         // compare hexa value to the HashMap
         return compare(hex, Data.hmap);
@@ -137,15 +134,15 @@ public class ImageWorker {
      */
     public static String compare(String hex, HashMap<String,String> hmap) {
         double answer, ref = 1;
-        String keyResult = "";
+        var keyResult = "";
         // iterate through HashMap
-        for (HashMap.Entry pair : hmap.entrySet()) {
+        for (var pair : hmap.entrySet()) {
             // compare the given value and the current HashMap key
-            answer = distance(hex, pair.getKey().toString().toLowerCase());
+            answer = distance(hex, pair.getKey().toLowerCase());
 
             if (answer < ref) {
                 ref = answer;
-                keyResult = (String) pair.getKey();
+                keyResult = pair.getKey();
             }
         }
         return keyResult;
@@ -162,8 +159,8 @@ public class ImageWorker {
         int red, green, blue;
         double answer;
         //convert values to int
-        int rgbVal = Integer.parseInt(hexVal, 16);
-        int rgbRef = Integer.parseInt(hexRef, 16);
+        var rgbVal = Integer.parseInt(hexVal, 16);
+        var rgbRef = Integer.parseInt(hexRef, 16);
 
         // calculate the distance between the given color and current color
         red = (rgbVal >> 16) & 0xff;
@@ -189,15 +186,15 @@ public class ImageWorker {
      * @return RGBA formated value as a String
      */
     private String formatARGB(int pixel) {
-        int alpha = (pixel >> 24) & 0xff;
-        int red = (pixel >> 16) & 0xff;
-        int green = (pixel >> 8) & 0xff;
-        int blue = (pixel) & 0xff;
+        var alpha = (pixel >> 24) & 0xff;
+        var red = (pixel >> 16) & 0xff;
+        var green = (pixel >> 8) & 0xff;
+        var blue = (pixel) & 0xff;
 
         // change the alpha value to a percentage of 255
-        int perc = (alpha * 100) / 255;
+        var perc = (alpha * 100) / 255;
         // format the integer to a 0.00 format
-        double result = perc * 0.01;
+        var result = perc * 0.01;
 
         return "rgba(" + red + "," + green + "," + blue + "," + result + ")";
     }
@@ -207,7 +204,7 @@ public class ImageWorker {
      * @param gp the grid pane to clear
      */
     public void clearGridPane(GridPane gp){
-        ObservableList<Node> l = gp.getChildren();
+        var l = gp.getChildren();
         while (l.size()>0){
             l.remove(0,1);
         }

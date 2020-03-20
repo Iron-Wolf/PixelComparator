@@ -6,7 +6,7 @@ public class Data {
     public static final HashMap<String, String> hmap = createMap();
 
     private static HashMap<String,String> createMap(){
-        HashMap<String,String> hmap = new HashMap<String, String>();
+        HashMap<String,String> hmap = new HashMap<>();
         hmap.put("FFFFFF","blanc");
         hmap.put("FFF0C5","creme");
         hmap.put("FFFF00","jaune");
@@ -48,5 +48,5 @@ public class Data {
 
     // max width and height of the image
     public static final int maxWidth = 400;
-    public static final int maxheight = 400;
+    public static final int maxHeight = 400;
 }

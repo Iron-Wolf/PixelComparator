@@ -1,7 +1,9 @@
 # PixelComparator
 [![CodeFactor](https://www.codefactor.io/repository/github/iron-wolf/pixelcomparator/badge)](https://www.codefactor.io/repository/github/iron-wolf/pixelcomparator)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e95d36fa348e47f09d56031b6379ce2c)](https://www.codacy.com/manual/Iron-Wolf/PixelComparator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Iron-Wolf/PixelComparator&amp;utm_campaign=Badge_Grade)
-![](https://img.shields.io/github/languages/code-size/Iron-Wolf/PixelComparator) 
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Iron-Wolf/PixelComparator)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Iron-Wolf/PixelComparator)
+![GitHub last commit](https://img.shields.io/github/last-commit/Iron-Wolf/PixelComparator)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Iron-Wolf/PixelComparator.svg)](http://isitmaintained.com/project/Iron-Wolf/PixelComparator "Average time to resolve an issue")  
 
 Detect nearest color from each pixel from a pre-pixelated picture

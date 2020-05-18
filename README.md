@@ -7,7 +7,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Iron-Wolf/PixelComparator)](https://github.com/Iron-Wolf/PixelComparator/commits)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Iron-Wolf/PixelComparator.svg)](http://isitmaintained.com/project/Iron-Wolf/PixelComparator "Average time to resolve an issue")  
 
-Detect nearest color from each pixel from a pre-pixelated picture
+Detecting the closest color to each pixel of a pre-pixelized image
 
 ## Download SDK
 Open-jdk is accessible on the [official website](https://jdk.java.net/).  
@@ -15,21 +15,21 @@ JavaFX is hosted on [Gluon](https://gluonhq.com/products/javafx/).
 
 ## Compile & Debug
 To compile the project with IntelliJ :
- - Check out the project from github
- - Configure the source folder in the [Content Root](https://www.jetbrains.com/help/idea/content-roots.html)
- - Build (choose one)
-   - Maven : Create a Maven configuration with `javafx:run` (and `Build` before launch)
-   - Application with VM options : `-p </path/jafx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.swing`
- - Run the configuration
+- Check out the project from github
+- Configure the source folder in the [Content Root](https://www.jetbrains.com/help/idea/content-roots.html)
+- Build (choose one)
+  - Maven : Create a Maven configuration with `javafx:run` (and `Build` before launch)
+  - Application with VM options : `-p </path/jafx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.swing`
+- Run the configuration
 
 Make sure you have the JDK referenced in the project settings.  
 
 ### JavaFX with Maven
 This project is configured with JavaFX as a Maven dependency.  
 The actual JavaFX situation with Maven is :
- - Use the [com.zenjava](https://github.com/openjfx/javafx-maven-plugin) maven plugin with Java 8 or 9
- - Use Java 8 or 9 and don't specify maven dependecy for JavaFX
- - Use the [org.openjfx](https://github.com/openjfx/javafx-maven-plugin) with Java 11+  
+- Use the [com.zenjava](https://github.com/openjfx/javafx-maven-plugin) maven plugin with Java 8 or 9
+- Use Java 8 or 9 and don't specify maven dependecy for JavaFX
+- Use the [org.openjfx](https://github.com/openjfx/javafx-maven-plugin) with Java 11+  
 
 Source on [stackoverflow](https://stackoverflow.com/a/15283999)  
 
@@ -68,5 +68,3 @@ Add VM options : https://stackoverflow.com/a/54292408
 Or run Maven goal `javafx:run`  
 
 Complete answer : https://stackoverflow.com/a/52470141
-
-

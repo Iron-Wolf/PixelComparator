@@ -9,6 +9,13 @@
 
 Detecting the closest color to each pixel of a pre-pixelized image
 
+# Installation
+Juste grab the latest jar artifact in the release tab, and launch it with java. No fuss.  
+
+# Contributing
+Check these steps to configure the project correctly.  
+It's also serves as a reminder, for my lazy brain.  
+
 ## Download SDK
 Open-jdk is accessible on the [official website](https://jdk.java.net/).  
 JavaFX is hosted on [Gluon](https://gluonhq.com/products/javafx/).  
@@ -26,7 +33,7 @@ Make sure you have the JDK referenced in the project settings.
 
 ### JavaFX with Maven
 This project is configured with JavaFX as a Maven dependency.  
-The actual JavaFX situation with Maven is :
+The actual JavaFX situation with Maven is, either :
 - Use the [com.zenjava](https://github.com/openjfx/javafx-maven-plugin) maven plugin with Java 8 or 9
 - Use Java 8 or 9 and don't specify maven dependecy for JavaFX
 - Use the [org.openjfx](https://github.com/openjfx/javafx-maven-plugin) with Java 11+  
@@ -54,13 +61,16 @@ java -p javafx-sdk-11.0.2/lib \
 ```
 
 ## IntelliJ Troubleshooting
+You might encounter one of this errors with the IntelliJ IDE.  
 
+### Maven version
 > Error:java: error: release version 5 not supported  
 
-Force target Maven version to the JDK version (default is 1.5).  
+Force target Maven version to the JDK version (default is 1.5, which might not be appropriate for your JDK).  
 Change the source/target configuration in the POM.  
 https://stackoverflow.com/a/12900859  
 
+### JavaFX modules
 > IllegalAccessError with FXMLLoaderHelper  
 
 IntelliJ doesn't load all JavaFX module by default.  
